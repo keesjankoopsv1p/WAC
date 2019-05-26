@@ -8,6 +8,12 @@
 				<input type="submit" value="Go!" />
 			</div>
 		</form>
+		<form action="filebrowser" method="get">
+			<div>
+				<input type="text" name="path" />
+				<input type="submit" value="get file" />
+			</div>
+		</form>
 		<form action="CalculatorServlet.do" method="get">
 			<div>
 				<input type="text" name="Waarde1" />
@@ -16,6 +22,27 @@
 				<input type="submit" name="Vermenigvuldig" value="Vermenigvuldig" />
 				<input type="submit" name="Optellen" value="Optellen" />
 				<input type="submit" name="Aftrekken" value="Aftrekken" />
+			</div>
+		</form>
+		<form action="restservices/countries" method="get">
+			<div>
+				<input type="submit" name="Alle landen" value="countries" />
+			</div>
+		</form>
+		<form action="restservices/countries/code method="get">
+			<div>
+				<input type="text" name="code" />
+				<input type="submit" value="Go!" />
+			</div>
+		</form>
+		<form action="restservices/countries" method="get">
+			<div>		
+				<input type="submit" name="Grootste oppervlakte"/>
+			</div>
+		</form>
+		<form action="restservices/countries" method="get">
+			<div>
+				<input type="submit" name="Meeste inwoners"/>
 			</div>
 		</form>
 	</body>
