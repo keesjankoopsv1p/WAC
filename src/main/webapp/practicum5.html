@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<title>Weather API</title>
+	<link rel="stylesheet" type="text/css" href="/firstapp/practicum5Style.css">
+	<body onload="initPage()">
+		<div id="frame">
+			<div id="myLocation">
+				<h1>My Location!</h1>
+				<label id="Landcode">Landcode:</label><br>
+				<label id="Land">Land:</label><br>
+				<label id="Regio">Regio:</label><br>
+				<label id="Stad" onclick="initPage()">Stad:</label><br>
+				<label id="Postcode">Postcode:</label><br>
+				<label id="Latitude">Latitude:</label><br>
+				<label id="Longitude">Longitude:</label><br>
+				<label id="IP">IP:</label>
+			</div>
+			<div id="weatherInfo">
+				<h1 id="Titel"></h1>
+				<label id="Temp">Temperatuur</label><br>
+				<label id="Lucht"></label><br>
+				<label id="WindS"></label><br>
+				<label id="WindR"></label><br>
+				<label id="ZonOp"></label><br>
+				<label id="ZonOn"></label>
+			</div>
+			<div id="countryList">
+				<h1>Beschikbare vakantiebestemmingen</h1>
+				<table id="tabel">
+					<tr>
+						<th>land</th><th>hoofdstad</th><th>regio</th><th>oppervlakte</th><th>inwoners</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<script type="text/javascript">
+		var ding;
+			function initPage() {
+				fetch('https://ipapi.co/json/')
+				.then(function(res){
+					return (res.text());
+				})
+				.then(function(data) {
+					ding = JSON.parse(data);
+					document.getElementById("Landcode").innerHTML = "Landcode: " + ding.country;
+					document.getElementById("Land").innerHTML = "Land: " + ding.country_name;
+					document.getElementById("Regio").innerHTML = "Regio: " + ding.region;
+					document.getElementById("Stad").innerHTML = "Stad: " + ding.city;
+					document.getElementById("Stad").addEventListener("click", showWeather(ding.latitude, ding.longitude, ding.city));
+					document.getElementById("Postcode").innerHTML = "Postcode: " + ding.postal;
+					document.getElementById("Latitude").innerHTML = "Latitude: " + ding.latitude;
+					document.getElementById("Longitude").innerHTML = "Longitude: " + ding.longitude;
+					document.getElementById("IP").innerHTML = "IP: " + ding.ip;
+					showWeather(ding.latitude, ding.longitude, ding.city)
+					loadCountries()
+				})
+				}
+			
+			function showWeather(latitude, longitude, city) {
+				document.getElementById("Titel").innerHTML = "Het weer in " + city;
+				fetch('https://api.openweathermap.org/data/2.5/weather?lat=' + latitude + '&lon=' + longitude + '&units=metric&APPID=5028d4adbc0654bfb3e3d9bf5340bf3b')
+				.then (function(res){
+					return (res.text());
+				})
+				.then(function(data) {
+					var x = JSON.parse(data);
+					var zop = x.sys.sunrise;
+					var date = new Date(zop * 1000);
+					var zod = x.sys.sunset;
+					var date2 = new Date(zod * 1000);
+					
+					document.getElementById("Temp").innerHTML = 'Temperatuur: ' + x.main.temp;
+					document.getElementById("Lucht").innerHTML = 'Luchtvochtigheid: ' + x.main.humidity;
+					document.getElementById("WindS").innerHTML = 'Windsnelheid: ' + x.wind.speed + 'm/s';
+					document.getElementById("WindR").innerHTML = 'Windrichting: ' + degToCompass(x.wind.deg);
+					document.getElementById("ZonOp").innerHTML = 'Zonsopgang: ' + date.toLocaleTimeString();
+					document.getElementById("ZonOn").innerHTML = 'Zonsondergang: ' + date2.toLocaleTimeString();
+				})
+			}
+			
+			function degToCompass(num) {
+			    var val = Math.floor((num / 22.5) + 0.5);
+			    var arr = ["Noord", "Noord Noord Oost", "Noord Oost", "Oost Noord Oost", "Oost", "Oost Zuid Oost", "Zuid Oost", "Zuid Zuid Oost", "Zuid", "Zuid Zuid West", "Zuid West", "West Zuid West", "West", "West Noord West", "Noord West", "Noord Noord West"];
+			    return arr[(val % 16)];
+			}
+			
+			function loadCountries(){
+				fetch('http://localhost:8080/firstapp/restservices/countries')
+				.then (function(res){
+					return (res.text());
+				})
+				.then(function(data) {
+					var countries = JSON.parse(data);
+					var tabel = document.getElementById("tabel");
+					for (const country of countries) {
+						tabel.innerHTML += '<tr onClick=\"showWeather(' + country.lat + ', ' + country.lng + ', ' + '\'' + country.capital + '\'' + ')\"> <td>' + country.name + '</td><td>' + country.capital + '</td> <td>' + country.region + '</td> <td>' + country.surface + '</td> <td>' + country.population + '</td> </tr>';
+						console.log(country);
+					}
+				})
+			}
+		</script>
+	</body>
+</html> 

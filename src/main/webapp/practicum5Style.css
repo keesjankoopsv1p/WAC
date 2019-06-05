@@ -1,0 +1,21 @@
+body {
+	background-color: #c0c0c0;
+}
+
+h1 {
+	color: white;
+	background-color: #808080;
+}
+label {
+	width: 800px;
+	border: 1px solid black;
+}
+table{
+	color: white;
+	border: 1px solid black;
+	background-color: #3939399e;
+}
+tr:hover {
+	color: pink;
+	cursor: pointer;
+}
