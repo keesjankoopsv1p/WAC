@@ -23,4 +23,12 @@ public class WorldService {
 	public Country getCountryByCode(String code) {
 		return countryDao.findByCode(code);
 	}
+	
+	public boolean deleteCountry(String code) {
+		return countryDao.delete(code);
+	}
+	
+	public boolean updateCountry(String code, String naam, String capital, String regio, int opv, int inw) {
+		return countryDao.update(code, naam, capital, regio, opv, inw);
+	}
 }

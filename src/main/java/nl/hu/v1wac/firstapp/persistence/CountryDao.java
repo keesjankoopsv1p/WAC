@@ -16,8 +16,8 @@ public interface CountryDao {
 	
 	public List<Country> find10LargestSurfaces();
 	
-	public boolean update(Country country);
+	public boolean update(String code, String naam, String capital, String regio, int opv, int inw);
 	
-	public boolean delete(Country country);
+	public boolean delete(String code);
 
 }

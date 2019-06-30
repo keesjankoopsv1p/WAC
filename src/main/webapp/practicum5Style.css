@@ -29,3 +29,7 @@ th, td{
 div#countryList {
 	overflow-x: auto;
 }
+
+div.update {
+	display: none;
+}

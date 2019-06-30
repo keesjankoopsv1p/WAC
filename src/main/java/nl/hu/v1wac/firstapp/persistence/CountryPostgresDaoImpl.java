@@ -37,7 +37,7 @@ public class CountryPostgresDaoImpl extends PostgresBaseDao implements CountryDa
 	
 	public boolean save(Country country) {
 		String query = String.format("INSERT INTO country (code, iso3, name, capital, continent, region, surfacearea, population, governmentform, latitude, longitude) "
-				+ "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s", country.getCode(), country.getIso3(), country.getName(), country.getCapital(), country.getContinent(),
+				+ "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", country.getCode(), country.getIso3(), country.getName(), country.getCapital(), country.getContinent(),
 				country.getRegion(), country.getSurface(), country.getPopulation(), country.getGovernment(), country.getLatitude(), country.getLongitude());
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(query);
@@ -66,11 +66,11 @@ public class CountryPostgresDaoImpl extends PostgresBaseDao implements CountryDa
 		return find("SELECT * FROM country ORDER BY surfacearea DESC LIMIT 10");
 	}
 	
-	public boolean update(Country country) {
+	public boolean update(String code, String naam, String capital, String regio, int opv, int inw) {
 		//code, iso3, name, capital, continent, region, surfacearea, population, governmentform, latitude, longitude
-		String query = String.format("UPDATE country SET code = '%s', iso3 = '%s', name = '%s', capital = '%s', contitent = '%s', region = '%s', "
-			+ "surfacearea = '%s', population = '%s', governmentform = '%s', latitude = '%s', longitude= '%s' WHERE code = '%s'", 
-			country.getCode(), country.getIso3(), country.getName(), country.getCapital(), country.getContinent(),country.getRegion(), country.getSurface(), country.getPopulation(), country.getGovernment(), country.getLatitude(), country.getLongitude(), country.getCode());
+		String query = String.format("UPDATE country SET name = '%s', capital = '%s', region = '%s', surfacearea = %d, population = %d WHERE code = '%s'", 
+			naam, capital, regio, opv, inw, code);
+		System.out.println(query);
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			int x = 0;
@@ -82,8 +82,8 @@ public class CountryPostgresDaoImpl extends PostgresBaseDao implements CountryDa
 		return true;
 		}	
 	
-	public boolean delete(Country country) {
-			String query = String.format("DELETE FROM country WHERE code = '%s'", country.getCode());
+	public boolean delete(String code) {
+			String query = String.format("DELETE FROM country WHERE code = '%s'", code);
 		try (Connection con = super.getConnection()) {
 			PreparedStatement pstmt = con.prepareStatement(query);
 			int x = 0;

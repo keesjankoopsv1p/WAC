@@ -1,6 +1,8 @@
 package nl.hu.v1wac.firstapp.webservices;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -34,7 +36,7 @@ public class WorldResource {
 	}
 	
 	@GET
-	//@Produces("application/json")
+	@Produces("application/json")
 	public String getCountries() {
 		WorldService worldService = ServiceProvider.getWorldService();
 		JsonArrayBuilder jab = Json.createArrayBuilder();
@@ -90,5 +92,32 @@ public class WorldResource {
 		JsonArray array = jab.build();
 		return array.toString();
 	}
+	
+	@GET
+	@Path("/delete/{code}")
+	public String deleteCountry(@PathParam("code") String code) {
+		WorldService worldService = ServiceProvider.getWorldService();
+		boolean result = worldService.deleteCountry(code);
+		if (result) {
+			return code + " is succesvol verwijderd!";
+		}
+		else {
+			return "het verwijderen is mislukt";
+		}
+	}
+	
+	@PUT
+	@Path("/update")
+	public String updateCountry(@FormParam("code") String code, @FormParam("land") String land, @FormParam("hoofdstad") String hoofdstad,
+			@FormParam("regio") String regio, @FormParam("oppervlakte") int opv, @FormParam("inwoners") int inw) {
+			WorldService worldService = ServiceProvider.getWorldService();
+				boolean result = worldService.updateCountry(code, land, hoofdstad, regio, opv, inw);
+				if (result) {
+				return "gelukt";
+				}
+				else {
+				return "niet gelukt";
+			}
+		}
 }
 
