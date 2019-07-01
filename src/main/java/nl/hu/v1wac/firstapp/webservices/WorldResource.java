@@ -7,9 +7,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 
 import java.util.List;
 
+import javax.annotation.security.RolesAllowed;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
@@ -108,6 +110,7 @@ public class WorldResource {
 	
 	@PUT
 	@Path("/update")
+	@RolesAllowed("admin")
 	public String updateCountry(@FormParam("code") String code, @FormParam("land") String land, @FormParam("hoofdstad") String hoofdstad,
 			@FormParam("regio") String regio, @FormParam("oppervlakte") int opv, @FormParam("inwoners") int inw) {
 			WorldService worldService = ServiceProvider.getWorldService();

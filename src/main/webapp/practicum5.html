@@ -5,6 +5,12 @@
 	<link rel="stylesheet" type="text/css" href="/firstapp/practicum5Style.css">
 	<body onload="initPage()">
 		<div id="frame">
+		<form id="loginform">
+		<input type="text" name="username" />
+		<input type="password" name="password" />
+		<input type="button" value="login" id="login" />
+		</form>
+		
 			<div id="myLocation">
 				<h1>My Location!</h1>
 				<label id="Landcode">Landcode:</label><br>
@@ -143,6 +149,7 @@
 			})
 		}
 		
+		
 		function openForm(code, name, capital, region, surface, population) {
 			document.getElementById("update").style.display = "block";
 			document.getElementById("code").defaultValue = code;
@@ -158,18 +165,21 @@
 			}
 		
 		function updateCountry() {
-			console.log('hoi')
 			var formData = new FormData(document.querySelector("#updateCountry"));
 			var encData = new URLSearchParams(formData.entries());
-			fetch('http://localhost:8080/firstapp/restservices/countries/update', { method : 'PUT', body : encData })
+			fetch('http://localhost:8080/firstapp/restservices/countries/update', { method : 'PUT', headers : { 'Authorization': 'Bearer ' +  window.sessionStorage.getItem("sessionToken") }, body : encData })
 			.then (function(response){
-				return (response.text())
-			})
-			.then (function(data){
-				console.log(data);
-				closeForm();
-				initPage();
-			})
+				if (response.ok) {
+					console.log('wijziging voltooid');
+					closeForm();
+					initPage();
+				}
+				else {
+					console.log('eerst inloggen');
+					closeForm();
+					initPage();
+				}
+		})
 		}
 		
 		function loadCountries(){
@@ -217,6 +227,24 @@
             document.querySelector("#doUpdate").addEventListener("click", function(){
 			updateCountry();
 		})
+		
+			function login(event) {
+			var inlog = new FormData(document.querySelector("#loginform"));
+			var inlogEncData = new URLSearchParams(inlog.entries());
+
+				  fetch("restservices/authentication", { method: 'POST', body: inlogEncData })
+				    .then(function(response) {
+				      if (response.ok) return response.json();
+				      else throw "Wrong username/password";
+				    })
+				    .then(myJson => window.sessionStorage.setItem("sessionToken", myJson.JWT))
+				    .catch(error => console.log(error));
+				  	//console.log(window.sessionStorage.getItem("sessionToken"));
+				}
+			
+		document.querySelector("#login").addEventListener("click", login);
+
+		
         }
 		</script>
 	</body>
