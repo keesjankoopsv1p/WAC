@@ -140,7 +140,7 @@
 		}
 		
 		function deleteCountry(code) {
-			fetch('http://localhost:8080/firstapp/restservices/countries/delete/' + code)
+			fetch('/firstapp/restservices/countries/delete/' + code)
 			.then (function(res){
 				return (res.text());
 			})
@@ -167,7 +167,7 @@
 		function updateCountry() {
 			var formData = new FormData(document.querySelector("#updateCountry"));
 			var encData = new URLSearchParams(formData.entries());
-			fetch('http://localhost:8080/firstapp/restservices/countries/update', { method : 'PUT', headers : { 'Authorization': 'Bearer ' +  window.sessionStorage.getItem("sessionToken") }, body : encData })
+			fetch('/firstapp/restservices/countries/update', { method : 'PUT', headers : { 'Authorization': 'Bearer ' +  window.sessionStorage.getItem("sessionToken") }, body : encData })
 			.then (function(response){
 				if (response.ok) {
 					console.log('wijziging voltooid');
@@ -183,7 +183,7 @@
 		}
 		
 		function loadCountries(){
-			fetch('http://localhost:8080/firstapp/restservices/countries')
+			fetch('/firstapp/restservices/countries')
 			.then (function(res){
 				return (res.text());
 			})
